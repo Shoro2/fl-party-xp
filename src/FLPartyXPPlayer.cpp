@@ -23,13 +23,19 @@ public:
         uint32 groupSize = group->GetMembersCount();
         if (groupSize > 1)
         {
-            bool isRaid = group->isRaidGroup();
-            float bonusRate = xp_in_group_rate(groupSize, isRaid);
-            float adjusted = (float(amount) * groupSize) / bonusRate;
+            if (player->IsWithinRange(victim, 100.0f))
+            {
+                //uint32 oldAmount = amount;
+                bool isRaid = group->isRaidGroup();
+                float bonusRate = Acore::XP::xp_in_group_rate(groupSize, isRaid);
 
-            amount = uint32(adjusted);
+                float adjusted = (float(amount) * groupSize) / bonusRate;
 
-            ChatHandler(player->GetSession()).PSendSysMessage("[XP] Normalized to solo: %u (was %u)", amount, player->GetRewardedXP());
+                amount = uint32(adjusted);
+            }
+            
+
+            //ChatHandler(player->GetSession()).PSendSysMessage("[XP] Normalized to solo: %u (was %u)", amount, oldAmount);
         }
     }
 }
