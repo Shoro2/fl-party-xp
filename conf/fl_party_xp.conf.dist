@@ -15,3 +15,24 @@
 #
 
 FLPX.Enable = 1
+
+#
+#    FLPX.LevelCurve.Enable
+#        Description: Scale the XP earned on the Forgotten Land maps (quests, kills,
+#                     exploration) to the old FL levelling curve: XP x
+#                     player_xp_for_level / fl_xp_for_level for the player's level.
+#                     The FL quest line was built for that curve.
+#        Default:     1 - Enabled
+#                     0 - Disabled (stock XP everywhere)
+#
+
+FLPX.LevelCurve.Enable = 1
+
+#
+#    FLPX.LevelCurve.Maps
+#        Description: Comma-separated ids of the maps that count as Forgotten Land.
+#        Default:     "727,751,738,739,740,741,742,743,744,745,746,747,748,749,750,752"
+#                     (the FL continent, Port Ocean and the FL dungeons)
+#
+
+FLPX.LevelCurve.Maps = "727,751,738,739,740,741,742,743,744,745,746,747,748,749,750,752"

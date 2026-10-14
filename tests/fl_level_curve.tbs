@@ -1,0 +1,85 @@
+name    fl-party-xp - the FL levelling curve scales quest and kill XP on the FL maps only
+# Server-side test bot run (mod-fl-testbots), T1. Needs FLPX.LevelCurve.Enable = 1, the module's
+# fl_xp_for_level rows and this folder in TestBots.ScenarioDirs.
+#
+# A level-1 mage with 0 XP (.character level resets the XP) on the Forgotten Land map 727 (Kalu'thar
+# Haven) and in Northshire (map 0). Stock XP for level 1 is 400, the old FL table's 100: factor 4.
+# 1. Quest 90250 "Wake Up in Troubled Waters" (quest level 1, RewardXPDifficulty 3): QuestXP.dbc 40
+#    x Rate.XP.Quest 3 = 120 XP; on map 727 x 4 = 480: level 2 with 80 of 900 XP. In Northshire 120:
+#    level 1 with 120 of 400 XP. Quest XP never gets rested XP, so both numbers are exact.
+# 2. A kill: on map 727 a Wandering Exobeast (80912, level 5-8; the level difference counts up to 4):
+#    60 x Rate.XP.Kill 3 = 180, x 4 = 720: level 2 or more (rested XP can double it). In Northshire a
+#    Diseased Young Wolf (299, level 1): 50 x 3 = 150, at most 300 with rested XP: still level 1.
+# Each creature is respawned by the director first, so a corpse from an earlier run does not count.
+timeout 180s
+group none
+
+bot c mage level=1
+
+# ---------------------------------------------------------------- Forgotten Land (map 727)
+place 727 16560.0 12740.0 123.1
+require c alive
+log 1a - quest XP on map 727
+do gm target c
+as gm .character level 1
+as gm .quest remove 90250
+as gm .quest add 90250
+expect c queststatus 90250 complete
+as gm .quest reward 90250
+expect c queststatus 90250 rewarded
+as gm .pinfo
+expect output has "Level: 2 (80/900 XP"
+
+log 2a - kill XP on map 727
+as gm .character level 1
+pick e creature:80912 near c
+do gm target e
+as gm .respawn
+wait 6s
+pick e creature:80912 near c
+require e alive
+do c approach e
+wait 1s
+do c cast 42921 triggered
+do c cast 42921 triggered
+waitfor e dead timeout 5s
+wait 1s
+do gm target c
+as gm .pinfo
+expect output value Level >= 2
+
+# ---------------------------------------------------------------- Northshire (map 0)
+place 0 -8955.0 -90.0 87.5
+require c alive
+log 1b - quest XP in Northshire (stock)
+do gm target c
+as gm .character level 1
+as gm .quest remove 90250
+as gm .quest add 90250
+as gm .quest reward 90250
+expect c queststatus 90250 rewarded
+as gm .pinfo
+expect output has "Level: 1 (120/400 XP"
+
+log 2b - kill XP in Northshire (stock)
+as gm .character level 1
+pick w creature:299 near c
+do gm target w
+as gm .respawn
+wait 6s
+pick w creature:299 near c
+require w alive
+do c approach w
+wait 1s
+do c cast 42921 triggered
+do c cast 42921 triggered
+waitfor w dead timeout 5s
+wait 1s
+do gm target c
+as gm .pinfo
+expect output value Level == 1
+
+cleanup
+do gm target c
+as gm .quest remove 90250
+as gm .character level 80

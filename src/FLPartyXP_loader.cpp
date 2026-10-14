@@ -4,6 +4,7 @@
 
 // From SC
 void AddFLPartyXPScripts();
+void AddFLLevelCurveScripts();
 
 // Add all
 // cf. the naming convention https://github.com/azerothcore/azerothcore-wotlk/blob/master/doc/changelog/master.md#how-to-upgrade-4
@@ -11,5 +12,6 @@ void AddFLPartyXPScripts();
 void Addfl_party_xpScripts()
 {
     AddFLPartyXPScripts();
+    AddFLLevelCurveScripts();
 }
 
