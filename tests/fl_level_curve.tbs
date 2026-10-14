@@ -11,6 +11,8 @@ name    fl-party-xp - the FL levelling curve scales quest and kill XP on the FL 
 #    60 x Rate.XP.Kill 3 = 180, x 4 = 720: level 2 or more (rested XP can double it). In Northshire a
 #    Diseased Young Wolf (299, level 1): 50 x 3 = 150, at most 300 with rested XP: still level 1.
 # Each creature is respawned by the director first, so a corpse from an earlier run does not count.
+# .pinfo reads the XP from the characters table (the level is live), so the bot saves (.save) first;
+# `output value` takes the first match of its label, and "GMLevel" comes before "Level": hence "| Level".
 timeout 180s
 group none
 
@@ -27,6 +29,7 @@ as gm .quest add 90250
 expect c queststatus 90250 complete
 as gm .quest reward 90250
 expect c queststatus 90250 rewarded
+as c .save
 as gm .pinfo
 expect output has "Level: 2 (80/900 XP"
 
@@ -44,9 +47,10 @@ do c cast 42921 triggered
 do c cast 42921 triggered
 waitfor e dead timeout 5s
 wait 1s
+as c .save
 do gm target c
 as gm .pinfo
-expect output value Level >= 2
+expect output value "| Level" >= 2
 
 # ---------------------------------------------------------------- Northshire (map 0)
 place 0 -8955.0 -90.0 87.5
@@ -58,6 +62,7 @@ as gm .quest remove 90250
 as gm .quest add 90250
 as gm .quest reward 90250
 expect c queststatus 90250 rewarded
+as c .save
 as gm .pinfo
 expect output has "Level: 1 (120/400 XP"
 
@@ -75,9 +80,10 @@ do c cast 42921 triggered
 do c cast 42921 triggered
 waitfor w dead timeout 5s
 wait 1s
+as c .save
 do gm target c
 as gm .pinfo
-expect output value Level == 1
+expect output value "| Level" == 1
 
 cleanup
 do gm target c
