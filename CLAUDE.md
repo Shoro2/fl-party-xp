@@ -26,9 +26,11 @@ There is no module README (`.github/README.md` is the AzerothCore skeleton text)
 ## Status and progress
 
 - **Party XP**: workbench and host since the first deploy (2026-07-13), T2 (2026-07-13).
-- **Levelling curve**: built 2026-10-14 (branch `claude/fl-quest-xp-e2ed7f04`); evidence tier
-  and host state in share-public `forgotten-land/server/25-fl-quest-xp-curve.md` and the MIG
-  ledger. Test: `tests/fl_level_curve.tbs` (quest and kill XP on map 727 vs Northshire).
+- **Levelling curve**: on the workbench since 2026-10-14 23:39 local (worldserver `80276c86…`,
+  boot line `>> FL levelling curve: on, 79 levels, 16 maps`), **T1**: bot run 663
+  `tests/fl_level_curve.tbs` PASSED 13/0 (quest 90250 on map 727 = 480 XP, in Northshire 120; a kill
+  on 727 levels a level-1 mage, in Northshire not). Owed: T2 in game, the host (MIG ledger). Details:
+  share-public `forgotten-land/server/25-fl-quest-xp-curve.md`.
 
 ## Next steps
 
